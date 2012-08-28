@@ -66,6 +66,9 @@ html_header = '''<!DOCTYPE html>
     <link rel="stylesheet" type="text/css" href="assets/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/grid.css">
     <link rel="stylesheet" type="text/css" href="assets/style.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/jquery-ui/css/flick/jquery-ui.css">
+    <script src="assets/jquery-ui/js/jquery-ui.min.js"></script>
 </head>
 <body>
     <div id="wrapper" class="grid clearfix">
@@ -110,7 +113,7 @@ fout.write('<ol id="repos">')
 json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-mv.de/mv/mitglieder").read().decode('utf8'))
 
 fout.write('''
-<li class="entry grid-1 ">
+<li class="entry grid-1" data-category="members">
     <a href="http://wiki.piratenpartei.de/Mitgliederzahl#Mitglieder_nach_Landesverband">
         <h2>Mitglieder</h2>
         <h3>Statistik</h3>''')
@@ -141,7 +144,7 @@ fout.write('''</a>
 json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-mv.de/mv/kontostand").read().decode('utf8'))
 
 fout.write('''
-<li class="entry grid-1 ">
+<li class="entry grid-1" data-category="balance">
     <a href="http://piratenpartei-mv.de/spenden">
         <h2>Kontostand</h2>
         <h3>Statistik</h3>''')
@@ -176,7 +179,7 @@ fout.write('''</a>
 json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-mv.de/helpdesk").read().decode('utf8'))
 
 fout.write('''
-<li class="entry grid-1 ">
+<li class="entry grid-1 data-category="helpdesk">
     <a href="https://helpdesk.piratenpartei-mv.de/otrs/index.pl">
         <h2>Helpdesk</h2>
         <h3>Statistik der letzten 30 Tage</h3>''')
@@ -219,7 +222,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object:
     fout.write('''
-    <li class="entry grid-1 python">
+    <li class="entry grid-1 python data-category="lqfb">
         <a href="''' + str(issue['url']) + '''">
             <h2>''' + issue['name'][0:50])
     if len(issue['name']) > 50:
@@ -260,7 +263,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object:
     fout.write('''
-    <li class="entry grid-1 python">
+    <li class="entry grid-1 python" data-category="lqfb">
         <a href="''' + str(issue['url']) + '''">
             <h2>''' + issue['name'][0:50])
     if len(issue['name']) > 50:
@@ -297,7 +300,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object:
     fout.write('''
-    <li class="entry grid-1 python">
+    <li class="entry grid-1 python" data-category="lqfb">
         <a href="''' + str(issue['url']) + '''">
             <h2>''' + issue['name'][0:50])
     if len(issue['name']) > 50:
@@ -341,7 +344,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object['issues']:
     fout.write('''
-    <li class="entry grid-1">
+    <li class="entry grid-1" data-category="vorstand">
         <a href="https://redmine.piratenpartei-mv.de/redmine/issues/''' + str(issue['id']) + '''">
             <h2>''' + issue['subject'] + '''</h2>
             <h3>''' + issue['category']['name'] + ''' Landesvorstand</h3>''')
@@ -388,7 +391,7 @@ for issue in json_object['issues']:
         continue
 
     fout.write('''
-    <li class="entry grid-1 ruby">
+    <li class="entry grid-1 ruby" data-category="todo">
         <a href="https://redmine.piratenpartei-mv.de/redmine/issues/''' + str(issue['id']) + '''">
             <h2>''' + issue['subject'] + '''</h2>
             <h3>Todo</h3>''')
@@ -436,7 +439,7 @@ for issue in json_object:
         title = title[title.find("]")+1:]
     
     fout.write('''
-    <li class="entry grid-1 java">
+    <li class="entry grid-1 java" data-category="pads">
         <a href="''' + str(issue['url']) + '''">
             <h2>''' + title[0:50])
     if len(title) > 50:
@@ -510,7 +513,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object:
     fout.write('''
-    <li class="entry grid-1 scala">
+    <li class="entry grid-1 scala" data-category="articles">
         <a href="''' + str(issue['url']) + '''">
             <h2>''' + issue['title'][0:50])
     if len(issue['title']) > 50:
@@ -552,7 +555,7 @@ json_object = json.loads(urllib.request.urlopen("http://opendata.piratenpartei-m
 
 for issue in json_object['query']['recentchanges']:
     fout.write('''
-    <li class="entry grid-1 java">
+    <li class="entry grid-1 java" data-category="wiki">
         <a href="http://wiki.piratenpartei.de/''' + urllib.parse.quote(str(issue['title'])) + '''">
             <h2>''' + issue['title'].replace("MV:", "")[0:50])
     if len(issue['title']) > 50:
@@ -610,12 +613,12 @@ for i in json_object:
     count = count + 1
     if 'commenturl' in issue:
       fout.write('''
-    <li class="entry grid-1 ">
+    <li class="entry grid-1" data-category="facebook">
         <a href="''' + issue['commenturl'] + '''">
             <h2>''' + name[0:50])
     else:
       fout.write('''
-    <li class="entry grid-1 ">
+    <li class="entry grid-1" data-category="facebook">
         <a href="">
             <h2>''' + name[0:50])
     if len(name) > 50:
